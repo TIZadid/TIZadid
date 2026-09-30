@@ -1,0 +1,69 @@
+---
+import { render } from 'astro:content';
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { getSite } from '../lib/site';
+const { projects } = await getSite();
+const host = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+const items = await Promise.all(projects.map(async (p) => ({ p, Content: (await render(p)).Content })));
+---
+<section class="section wrap" id="projects">
+  <SectionHead index="04" label="Projects" title="Things I built" />
+  <div class="stack">
+    {items.map(({ p, Content }, i) => (
+      <article class="card" data-tilt data-reveal>
+        <header class="top">
+          <p class="label">{String(i + 1).padStart(2, '0')} / {p.data.year}</p>
+          {p.data.url && <p class="label host">{host(p.data.url)}</p>}
+        </header>
+        <h3 class="display name">{p.data.name}</h3>
+        <div class="cols">
+          <div class="copy">
+            <p class="tagline">{p.data.tagline}</p>
+            <div class="prose"><Content /></div>
+          </div>
+          <div class="aside">
+            <ul class="chips">{p.data.stack.map((s) => <li class="chip">{s}</li>)}</ul>
+            <div class="links">
+              {p.data.url && (
+                <a class="btn btn--solid" href={p.data.url} target="_blank" rel="noopener" data-magnetic data-cursor="Open">
+                  Visit live <Icon name="arrow-up-right" size={14} />
+                </a>
+              )}
+              {p.data.repo && (
+                <a class="btn" href={p.data.repo} target="_blank" rel="noopener"><Icon name="si:github" size={14} />Source</a>
+              )}
+            </div>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stack { display: grid; gap: 24px; }
+  .card {
+    background:
+      radial-gradient(480px circle at var(--px, 80%) var(--py, 0%), rgb(255 77 20 / 0.16), transparent 70%),
+      var(--surface);
+    border: 1px solid var(--line);
+    padding: clamp(20px, 3.5vw, 48px);
+    display: grid; gap: clamp(20px, 3vw, 40px);
+    will-change: transform;
+  }
+  .top { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .name { font-size: clamp(3.2rem, 13vw, 12rem); color: var(--accent); }
+  .cols { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(24px, 5vw, 80px); }
+  .tagline { font-size: clamp(1.2rem, 2vw, 1.75rem); line-height: 1.25; font-weight: 500; margin-bottom: 16px; }
+  .prose { color: var(--muted); max-width: 60ch; }
+  .prose :global(ul) { margin-top: 14px; display: grid; gap: 8px; }
+  .prose :global(li) { padding-left: 18px; position: relative; }
+  .prose :global(li)::before { content: ''; position: absolute; left: 0; top: 0.65em; width: 8px; height: 1px; background: var(--accent); }
+  .aside { display: grid; gap: 28px; align-content: space-between; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .links :global(svg[viewBox]) { flex: none; }
+  .links .btn :global(svg) { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+</style>

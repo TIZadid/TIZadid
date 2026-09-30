@@ -1,0 +1,42 @@
+---
+import Icon from './Icon.astro';
+import { getSite } from '../lib/site';
+const { profile, hobbies } = await getSite();
+const p = profile.data;
+const strava = hobbies.find((h) => h.data.url.includes('strava'))?.data.url;
+const socials = [
+  ['LinkedIn', p.linkedin, 'si:linkedin'],
+  ['GitHub', p.github, 'si:github'],
+  ['Strava', strava, 'si:strava'],
+].filter(([, url]) => url) as string[][];
+---
+<footer class="footer wrap" id="contact">
+  <p class="label"><span class="accent">06</span> / Contact</p>
+  <button class="display mail" data-copy={p.email} data-cursor="Copy" data-lines>
+    <span class="mask"><span>Say hello</span></span>
+    <span class="mask"><span class="accent addr">{p.email}</span></span>
+  </button>
+  <p class="label copied" data-copied aria-live="polite"></p>
+  <hr class="rule" />
+  <div class="row">
+    <ul class="socials">
+      {socials.map(([name, url, icon]) => (
+        <li><a class="label social" href={url} target="_blank" rel="noopener me"><Icon name={icon} size={14} />{name}</a></li>
+      ))}
+    </ul>
+    <p class="label">© {new Date().getFullYear()} {p.name}</p>
+    <a class="label top" href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<style>
+  .footer { padding-block: var(--section) 40px; display: grid; gap: 28px; }
+  .mail { text-align: left; font-size: clamp(2.6rem, 9.5vw, 9rem); }
+  .addr { text-transform: none; font-size: 0.62em; letter-spacing: -0.02em; word-break: break-all; }
+  .copied { min-height: 1.4em; color: var(--accent); }
+  .row { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; }
+  .socials { display: flex; flex-wrap: wrap; gap: 24px; }
+  .social { display: inline-flex; gap: 8px; align-items: center; color: var(--text); transition: color 0.3s; }
+  .social:hover, .top:hover { color: var(--accent); }
+  .social :global(svg) { fill: currentColor; }
+</style>

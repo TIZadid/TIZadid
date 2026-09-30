@@ -1,0 +1,156 @@
+@import '@fontsource-variable/archivo/standard.css';
+@import '@fontsource-variable/jetbrains-mono';
+
+:root {
+  --bg: #131314;
+  --surface: #1c1c1f;
+  --line: #2c2c30;
+  --text: #ece8df;
+  --muted: #8d8a84;
+  --accent: #ff4d14;
+  --paper: #e9e4d8;
+  --ink: #131314;
+
+  --sans: 'Archivo Variable', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --gutter: clamp(16px, 4vw, 56px);
+  --section: clamp(96px, 14vw, 200px);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  interpolate-size: allow-keywords;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--line) var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+h1, h2, h3, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+img, svg { display: block; max-width: 100%; }
+::selection { background: var(--accent); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ---------- type ---------- */
+.display {
+  font-family: var(--sans);
+  font-stretch: 62%;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.015em;
+}
+.label {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.accent { color: var(--accent); }
+
+/* ---------- layout ---------- */
+.wrap { padding-inline: var(--gutter); max-width: 1680px; margin-inline: auto; }
+.section { padding-block: var(--section); position: relative; }
+.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+/* A line of text that slides up from behind a mask. */
+.mask { display: block; overflow: clip; overflow-clip-margin: 0.06em; padding-top: 0.04em; }
+.mask > * { display: block; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 20px;
+  border: 1px solid currentColor;
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  position: relative; isolation: isolate; overflow: hidden;
+  transition: color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.btn::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: var(--accent);
+  transform: translateY(101%);
+  transition: transform 0.5s var(--ease);
+}
+.btn:hover, .btn:focus-visible { color: var(--ink); border-color: var(--accent); }
+.btn:hover::before, .btn:focus-visible::before { transform: none; }
+.btn--solid { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+.btn--solid::before { background: var(--text); }
+.btn--solid:hover { border-color: var(--text); }
+
+.chip {
+  font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 6px 10px; border: 1px solid var(--line); color: var(--muted);
+}
+
+/* Decorative barcode strip */
+.barcode {
+  height: 28px; width: 120px;
+  background: repeating-linear-gradient(90deg,
+    currentColor 0 2px, transparent 2px 4px, currentColor 4px 5px, transparent 5px 9px,
+    currentColor 9px 12px, transparent 12px 14px, currentColor 14px 15px, transparent 15px 17px);
+  opacity: 0.85;
+}
+
+/* ---------- motion: initial states exist only when JS will animate them ---------- */
+html.js [data-reveal] { opacity: 0; transform: translateY(24px); }
+html.js [data-lines] .mask > * { transform: translateY(110%); }
+
+/* ---------- custom cursor ---------- */
+.cursor { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  html.js .cursor {
+    display: grid; place-items: center;
+    position: fixed; left: 0; top: 0; z-index: 100;
+    width: 12px; height: 12px; margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    mix-blend-mode: difference;
+    transition: width 0.35s var(--ease), height 0.35s var(--ease), margin 0.35s var(--ease), opacity 0.3s;
+    opacity: 0;
+  }
+  html.js .cursor.is-on { opacity: 1; }
+  html.js .cursor.is-link { width: 44px; height: 44px; margin: -22px 0 0 -22px; }
+  html.js .cursor.is-label {
+    width: 84px; height: 84px; margin: -42px 0 0 -42px; mix-blend-mode: normal;
+  }
+  .cursor span {
+    font-family: var(--mono); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink); opacity: 0; transition: opacity 0.2s;
+  }
+  .cursor.is-label span { opacity: 1; }
+}
+
+/* Film grain */
+.grain {
+  position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

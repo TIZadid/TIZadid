@@ -1,0 +1,42 @@
+---
+import { render } from 'astro:content';
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { getSite } from '../lib/site';
+const { businesses } = await getSite();
+const cards = await Promise.all(businesses.map(async (b) => ({ b, Content: (await render(b)).Content })));
+---
+<section class="band" id="ventures">
+  <div class="section wrap">
+    <SectionHead index="03" label="Ventures" title="Businesses" />
+    {cards.length === 0 ? (
+      <p class="empty" data-reveal>Entries land here as soon as they are written.</p>
+    ) : (
+      <ul class="grid">
+        {cards.map(({ b, Content }, i) => (
+          <li class="card" data-reveal>
+            <p class="label">{String(i + 1).padStart(2, '0')}{b.data.status && ` / ${b.data.status}`}</p>
+            <h3 class="display name">{b.data.name}</h3>
+            {b.data.role && <p class="label">{b.data.role}</p>}
+            <p class="blurb">{b.data.blurb}</p>
+            <div class="prose"><Content /></div>
+            {b.data.url && (
+              <a class="btn" href={b.data.url} target="_blank" rel="noopener">Visit <Icon name="arrow-up-right" size={14} /></a>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .band { background: var(--paper); color: var(--ink); }
+  .band :global(.label) { color: rgb(19 19 20 / 0.6); }
+  .empty { font-size: clamp(1.3rem, 2.4vw, 2.2rem); font-weight: 500; max-width: 24ch; line-height: 1.2; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 0; border-top: 1px solid var(--ink); }
+  .card { display: grid; gap: 14px; align-content: start; justify-items: start; padding: 28px 28px 36px 0; border-bottom: 1px solid var(--ink); }
+  .name { font-size: clamp(2.2rem, 5vw, 4.5rem); }
+  .blurb { font-size: 1.2rem; font-weight: 500; line-height: 1.3; }
+  .prose { color: rgb(19 19 20 / 0.72); max-width: 52ch; }
+</style>

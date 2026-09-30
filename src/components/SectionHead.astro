@@ -1,0 +1,13 @@
+---
+interface Props { index: string; label: string; title: string }
+const { index, label, title } = Astro.props;
+---
+<header class="head" data-lines>
+  <p class="label"><span class="accent">{index}</span> / {label}</p>
+  <h2 class="display title"><span class="mask"><span>{title}</span></span></h2>
+</header>
+
+<style>
+  .head { display: grid; gap: 18px; margin-bottom: clamp(40px, 6vw, 88px); }
+  .title { font-size: clamp(3rem, 10vw, 9.5rem); }
+</style>

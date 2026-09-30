@@ -1,0 +1,77 @@
+---
+import { render } from 'astro:content';
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { getSite } from '../lib/site';
+const { hobbies } = await getSite();
+const items = await Promise.all(hobbies.map(async (h) => ({ h, Content: (await render(h)).Content })));
+const numeric = (value: string) => /^\d+$/.test(value);
+---
+<section class="section wrap" id="off-duty">
+  <SectionHead index="05" label="Off duty" title="Away from the keyboard" />
+  <div class="strips">
+    {items.map(({ h, Content }, i) => (
+      <article class={`strip strip--${i % 3}`} data-reveal>
+        <header class="top">
+          <p class="label">{String(i + 1).padStart(2, '0')} — {h.data.kicker}</p>
+          <Icon name={h.data.icon} size={20} />
+        </header>
+        <p class="display stat">
+          {numeric(h.data.stat) ? <span data-count={h.data.stat}>{h.data.stat}</span> : <span>{h.data.stat}</span>}
+          <span class="unit">{h.data.unit}</span>
+        </p>
+        <div class="body">
+          <h3 class="display title">{h.data.title}</h3>
+          <div class="prose"><Content /></div>
+        </div>
+        <footer class="bottom">
+          {h.data.url && (
+            <a class="btn" href={h.data.url} target="_blank" rel="noopener" data-magnetic>
+              {h.data.urlLabel} <Icon name="arrow-up-right" size={14} />
+            </a>
+          )}
+          {h.data.certificate && (
+            <a class="btn" href={h.data.certificate} target="_blank" rel="noopener" data-magnetic>
+              <Icon name="file-text" size={14} />View certificate
+            </a>
+          )}
+          <span class="barcode" aria-hidden="true"></span>
+        </footer>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .strips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .strip {
+    --fg: var(--text); --sub: var(--muted);
+    min-height: clamp(460px, 56vw, 720px);
+    display: grid; grid-template-rows: auto 1fr auto auto; gap: 24px;
+    padding: clamp(18px, 2vw, 28px);
+    background: var(--surface); color: var(--fg);
+    border: 1px solid var(--line);
+    transition: transform 0.6s var(--ease);
+  }
+  .strip:hover { transform: translateY(-10px); }
+  .strip--0 { --fg: var(--ink); --sub: rgb(19 19 20 / 0.7); background: var(--accent); border-color: var(--accent); }
+  .strip--2 { --fg: var(--ink); --sub: rgb(19 19 20 / 0.65); background: var(--paper); border-color: var(--paper); }
+  .strip :global(.label), .prose { color: var(--sub); }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top :global(svg) { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .stat { font-size: clamp(5rem, 13vw, 13rem); font-weight: 900; align-self: start; display: grid; }
+  .strip--1 .stat { color: var(--accent); }
+  .unit { font-size: 0.26em; letter-spacing: 0; margin-top: 0.2em; }
+  .title { font-size: clamp(1.6rem, 2.6vw, 2.6rem); margin-bottom: 10px; }
+  .prose { max-width: 36ch; }
+  .bottom { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; justify-content: space-between; }
+  .bottom .barcode { margin-left: auto; }
+  .strip--0 .btn::before, .strip--2 .btn::before { background: var(--ink); }
+  .strip--0 .btn:hover, .strip--2 .btn:hover { color: var(--paper); border-color: var(--ink); }
+  .bottom .btn :global(svg) { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  @media (max-width: 900px) {
+    .strips { grid-template-columns: 1fr; }
+    .strip { min-height: 0; }
+    .stat { font-size: clamp(5rem, 30vw, 10rem); }
+  }
+</style>

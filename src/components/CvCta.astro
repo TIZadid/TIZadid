@@ -1,0 +1,23 @@
+---
+const phrase = ['Build your own cut', 'ATS readable', 'Pick what goes in', 'Download PDF'];
+---
+<a class="cta" href="/cv" data-cursor="CV" aria-label="Build and download the CV">
+  <div class="track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <div class="run display">
+        {phrase.map((text, i) => <span class:list={{ solid: i === phrase.length - 1 }}>{text}</span><i>✳</i>)}
+      </div>
+    ))}
+  </div>
+</a>
+
+<style>
+  .cta { display: block; border-block: 1px solid var(--line); overflow: clip; padding-block: clamp(20px, 3vw, 40px); }
+  .track { display: flex; width: max-content; animation: slide 28s linear infinite; }
+  .cta:hover .track { animation-play-state: paused; }
+  .run { display: flex; align-items: center; gap: 0.35em; padding-right: 0.35em; font-size: clamp(3rem, 9vw, 8.5rem); white-space: nowrap; }
+  .run span { color: transparent; -webkit-text-stroke: 1px var(--text); transition: color 0.4s; }
+  .run span.solid, .cta:hover .run span { color: var(--accent); -webkit-text-stroke-color: var(--accent); }
+  .run i { font-style: normal; color: var(--accent); font-size: 0.5em; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+</style>

@@ -1,0 +1,46 @@
+---
+import SectionHead from './SectionHead.astro';
+import { getSite } from '../lib/site';
+const { profile, skills } = await getSite();
+---
+<section class="section wrap" id="profile">
+  <SectionHead index="01" label="Profile" title="Backend, mostly." />
+  <div class="cols">
+    <p class="summary" data-scrub>{profile.body?.trim()}</p>
+    <div class="side">
+      <ul class="skills">
+        {skills.data.groups.map((group) => (
+          <li data-reveal>
+            <span class="label">{group.label}</span>
+            <span class="items">{group.items.join(' · ')}</span>
+          </li>
+        ))}
+        {skills.data.soft.length > 0 && (
+          <li data-reveal>
+            <span class="label">Also</span>
+            <span class="items">{skills.data.soft.join(' · ')}</span>
+          </li>
+        )}
+      </ul>
+    </div>
+  </div>
+  <ul class="stats">
+    {profile.data.stats.map((stat) => (
+      <li data-reveal>
+        <span class="display num"><span data-count={stat.value}>{stat.value}</span><span class="accent">{stat.suffix}</span></span>
+        <span class="label">{stat.label}</span>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .cols { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .summary { font-size: clamp(1.4rem, 2.7vw, 2.5rem); line-height: 1.22; font-weight: 500; letter-spacing: -0.01em; }
+  .skills li { display: grid; grid-template-columns: 11ch 1fr; gap: 16px; padding-block: 16px; border-top: 1px solid var(--line); align-items: baseline; }
+  .skills li:last-child { border-bottom: 1px solid var(--line); }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: clamp(56px, 9vw, 128px); }
+  .stats li { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 18px; }
+  .num { font-size: clamp(4rem, 11vw, 10rem); text-transform: none; font-variant-numeric: tabular-nums; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+</style>

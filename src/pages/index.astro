@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Businesses from '../components/Businesses.astro';
+import Projects from '../components/Projects.astro';
+import OffDuty from '../components/OffDuty.astro';
+import CvCta from '../components/CvCta.astro';
+import { getSite } from '../lib/site';
+const { profile } = await getSite();
+---
+<Base title={`${profile.data.name} — ${profile.data.title}`} description={profile.data.tagline}>
+  <Hero />
+  <About />
+  <Experience />
+  <Businesses />
+  <Projects />
+  <OffDuty />
+  <CvCta />
+</Base>

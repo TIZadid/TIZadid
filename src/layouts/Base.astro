@@ -1,0 +1,52 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Preloader from '../components/Preloader.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#131314" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <script is:inline>
+      // Mark the page before first paint so animated content starts hidden only when it will be animated.
+      (() => {
+        const root = document.documentElement;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        root.classList.add('js');
+        let seen = true;
+        try { seen = sessionStorage.getItem('tiz-seen') === '1'; } catch {}
+        if (!seen) root.classList.add('loading');
+        // If the animation script never arrives, show everything anyway.
+        setTimeout(() => { if (!window.__tiz) root.classList.remove('js', 'loading'); }, 4000);
+      })();
+    </script>
+    <ClientRouter />
+  </head>
+  <body id="top">
+    <Preloader />
+    <Nav />
+    <main><slot /></main>
+    <Footer />
+    <div class="cursor" aria-hidden="true"><span></span></div>
+    <div class="grain" aria-hidden="true"></div>
+    <script>
+      import '../scripts/motion.ts';
+    </script>
+  </body>
+</html>

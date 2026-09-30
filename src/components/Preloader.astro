@@ -1,0 +1,19 @@
+<div class="preloader" aria-hidden="true">
+  <span class="label">TIZadid / loading</span>
+  <span class="display count" data-preload-count>000</span>
+  <span class="bar"><i data-preload-bar></i></span>
+</div>
+
+<style>
+  .preloader {
+    display: none;
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--bg);
+    padding: var(--gutter);
+    grid-template-rows: auto 1fr auto; align-items: end;
+  }
+  :global(html.js.loading) .preloader { display: grid; }
+  .count { font-size: clamp(6rem, 28vw, 24rem); color: var(--accent); justify-self: end; }
+  .bar { display: block; height: 2px; background: var(--line); }
+  .bar i { display: block; height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+</style>
