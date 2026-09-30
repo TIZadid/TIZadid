@@ -17,6 +17,17 @@ export interface CvModel {
   experience: CvEntry[];
   projects: CvEntry[];
   education: CvEntry[];
+  /** Free text typed into the CV page; never comes from the content folder. */
+  extra?: CvExtra[];
+}
+
+export interface CvExtra { title: string; lines: string[] }
+
+/** Added sections that actually have something to print, with a heading guaranteed. */
+export function usableExtras(cv: CvModel): CvExtra[] {
+  return (cv.extra ?? [])
+    .map((x) => ({ title: x.title.trim().toUpperCase() || 'ADDITIONAL', lines: x.lines.map((l) => l.trim()).filter(Boolean) }))
+    .filter((x) => x.lines.length);
 }
 
 const stripInline = (text: string) =>

@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { toAscii, type CvEntry, type CvModel } from './model';
+import { toAscii, usableExtras, type CvEntry, type CvModel } from './model';
 
 const MARGIN = 48;
 const LEADING = 1.38;
@@ -77,6 +77,10 @@ export function renderCvPdf(cv: CvModel): jsPDF {
   entries('WORK EXPERIENCE', cv.experience);
   entries('PROJECTS', cv.projects);
   entries('EDUCATION', cv.education);
+  for (const extra of usableExtras(cv)) {
+    heading(extra.title);
+    for (const line of extra.lines) write(line);
+  }
 
   return doc;
 }
