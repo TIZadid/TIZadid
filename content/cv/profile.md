@@ -7,6 +7,7 @@ phone: "+8801797192074"
 location: Dhaka, Bangladesh
 linkedin: https://www.linkedin.com/in/talha-islam-zadid/
 github: https://github.com/TIZadid
+instagram: https://www.instagram.com/t.i.zadid
 # Headline numbers shown on the home page. Add, remove or reorder freely.
 stats:
   - { value: 4, suffix: "+", label: Years in industry }

@@ -5,12 +5,9 @@ stat: "228"
 unit: m
 statLabel: Bungee jump
 icon: mountain
-# Put the certificate file in public/certificates/ and write its path here,
-# for example: /certificates/bungee.pdf
-certificate: ""
+# The file lives in public/certificates/
+certificate: /certificates/bungee-the-cliff-nepal.png
 order: 2
 ---
 
-Jumped from 228 metres.
-
-<!-- Add where and when, and attach the certificate above. -->
+Jumped 228 metres at The Cliff, Nepal, on 2 July 2024. Certificate of Bravery included.

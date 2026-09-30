@@ -5,12 +5,9 @@ stat: "50"
 unit: km
 statLabel: Longest run
 icon: footprints
-# Paste your Strava profile link here and the button appears on the site.
-url: ""
+url: https://strava.app.link/SF3GcfIUQ6b
 urlLabel: Follow on Strava
 order: 1
 ---
 
-My longest run so far is a 50 km ultra.
-
-<!-- Add the story: where, when, finish time, what it felt like at km 40. -->
+Longest run: 50.06 km on 15 November 2025, from Dharmapasha Upazila in Sylhet Division. 8:08:11 moving time at 9:45 /km, with 129 m of climbing.

@@ -18,10 +18,12 @@ const cards = await Promise.all(businesses.map(async (b) => ({ b, Content: (awai
             <p class="label">{String(i + 1).padStart(2, '0')}{b.data.status && ` / ${b.data.status}`}</p>
             <h3 class="display name">{b.data.name}</h3>
             {b.data.role && <p class="label">{b.data.role}</p>}
-            <p class="blurb">{b.data.blurb}</p>
+            {b.data.blurb && <p class="blurb">{b.data.blurb}</p>}
             <div class="prose"><Content /></div>
             {b.data.url && (
-              <a class="btn" href={b.data.url} target="_blank" rel="noopener">Visit <Icon name="arrow-up-right" size={14} /></a>
+              <a class="btn" href={b.data.url} target="_blank" rel="noopener">
+                {b.data.url.includes('instagram.com') ? 'Instagram' : 'Visit'} <Icon name="arrow-up-right" size={14} />
+              </a>
             )}
           </li>
         ))}

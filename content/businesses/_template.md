@@ -5,7 +5,7 @@ name: Business name
 role: Founder
 url: https://example.com
 status: Active          # e.g. Active, Building, Paused
-blurb: One sentence on what it is.
+blurb: One sentence on what it is.   # optional
 order: 1                # lower numbers show first
 draft: false            # true hides it from the site
 ---

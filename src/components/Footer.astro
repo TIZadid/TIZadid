@@ -7,6 +7,7 @@ const strava = hobbies.find((h) => h.data.url.includes('strava'))?.data.url;
 const socials = [
   ['LinkedIn', p.linkedin, 'si:linkedin'],
   ['GitHub', p.github, 'si:github'],
+  ['Instagram', p.instagram, 'si:instagram'],
   ['Strava', strava, 'si:strava'],
 ].filter(([, url]) => url) as string[][];
 ---
