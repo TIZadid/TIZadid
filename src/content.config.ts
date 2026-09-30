@@ -60,6 +60,7 @@ export const collections = {
     schema: z.object({
       name: z.string(),
       role: z.string().optional(),
+      logo: link,
       url: link,
       status: z.string().optional(),
       blurb: z.string().optional(),

@@ -3,6 +3,7 @@
 # Files starting with "_" are ignored by the site.
 name: Business name
 role: Founder
+# logo: /logos/your-logo.webp   # optional; put the file in public/logos/
 url: https://example.com
 status: Active          # e.g. Active, Building, Paused
 blurb: One sentence on what it is.   # optional

@@ -15,6 +15,7 @@ const cards = await Promise.all(businesses.map(async (b) => ({ b, Content: (awai
       <ul class="grid">
         {cards.map(({ b, Content }, i) => (
           <li class="card" data-reveal>
+            {b.data.logo && <img class="logo" src={b.data.logo} alt={`${b.data.name} logo`} width="480" height="480" />}
             <p class="label">{String(i + 1).padStart(2, '0')}{b.data.status && ` / ${b.data.status}`}</p>
             <h3 class="display name">{b.data.name}</h3>
             {b.data.role && <p class="label">{b.data.role}</p>}
@@ -38,6 +39,8 @@ const cards = await Promise.all(businesses.map(async (b) => ({ b, Content: (awai
   .empty { font-size: clamp(1.3rem, 2.4vw, 2.2rem); font-weight: 500; max-width: 24ch; line-height: 1.2; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 0; border-top: 1px solid var(--ink); }
   .card { display: grid; gap: 14px; align-content: start; justify-items: start; padding: 28px 28px 36px 0; border-bottom: 1px solid var(--ink); }
+  .logo { width: clamp(120px, 14vw, 180px); height: auto; aspect-ratio: 1; object-fit: cover; margin-bottom: 10px; transition: transform 0.6s var(--ease); }
+  .card:hover .logo { transform: scale(1.04) rotate(-2deg); }
   .name { font-size: clamp(2.2rem, 5vw, 4.5rem); }
   .blurb { font-size: 1.2rem; font-weight: 500; line-height: 1.3; }
   .prose { color: rgb(19 19 20 / 0.72); max-width: 52ch; }

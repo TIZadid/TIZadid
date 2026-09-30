@@ -1,8 +1,11 @@
 ---
 name: Ruh
+logo: /logos/ruh.webp
 url: https://www.instagram.com/ruh.bangladesh
-# Optional: role (e.g. Founder), status (e.g. Active), blurb (one sentence on what it is).
+status: Launched Eid ul Adha 2026
+blurb: Small-batch, hand-embroidered kurta and panjabi for men.
+# Optional: role (e.g. Founder)
 order: 2
 ---
 
-<!-- Write a short paragraph about Ruh here. -->
+Ruh (রূহ) means "soul". Quiet luxury for men, in a market dominated by printed panjabi. The embroidery is done by hand, and the slightly uneven stitching is the point: proof a person made it, not a printer. Each design exists in genuinely limited quantity.
