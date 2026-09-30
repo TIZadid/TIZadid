@@ -10,11 +10,11 @@ github: https://github.com/TIZadid
 instagram: https://www.instagram.com/t.i.zadid
 # Shown on the home page. The CV uses the text at the bottom of this file instead.
 about: >
-  Software engineer from Dhaka with 4+ years building backend systems: secure APIs,
+  Software engineer from Dhaka with 4+ years building backend systems, currently in telecom: secure APIs,
   microservices and databases that hold up under heavy data, mostly in Python and Java.
   Outside the day job I founded and run two Dhaka brands, Haturi Studio and Ruh, and ship side
-  projects like Khelbi Naki. Away from the screen I run, and I play football every
-  single weekend.
+  projects like Khelbi Naki. Away from the screen I run and play football with friends every
+  weekend, for fun and to keep fit.
 # Headline numbers shown on the home page. Add, remove or reorder freely.
 stats:
   - { value: 4, suffix: "+", label: Years in industry }

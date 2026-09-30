@@ -3,7 +3,7 @@ company: Penta Global Limited
 role: Software Engineer
 start: "2024"
 end: Present
-blurb: Delivering high-quality backend solutions for large-scale products and internal business applications.
+blurb: Delivering high-quality backend solutions for large-scale telecom products and internal business applications.
 order: 1
 ---
 

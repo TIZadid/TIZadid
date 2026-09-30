@@ -8,6 +8,6 @@ icon: trophy
 order: 3
 ---
 
-Every single weekend, without exception.
+With friends, every single weekend. For fun, and to keep fit.
 
 <!-- Add your position, your team, where you play. -->
