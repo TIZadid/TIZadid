@@ -15,6 +15,7 @@ export const collections = {
       name: z.string(),
       title: z.string(),
       tagline: z.string(),
+      about: z.string().optional(),
       email: z.string(),
       phone: link,
       location: link,

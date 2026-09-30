@@ -4,7 +4,7 @@ logo: /logos/haturi-studio.webp
 url: https://www.instagram.com/haturistudio
 status: Dhaka, Bangladesh
 blurb: Minimal wooden display pieces, handmade in Dhaka.
-# Optional: role (e.g. Founder)
+role: Founder
 order: 1
 ---
 

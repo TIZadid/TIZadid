@@ -1,4 +1,4 @@
-import { usableExtras, type CvEntry, type CvModel } from './model';
+import type { CvEntry, CvModel } from './model';
 
 /** The same CV as renderCvPdf, as plain text for pasting into application forms. */
 export function renderCvText(cv: CvModel): string {
@@ -27,7 +27,6 @@ export function renderCvText(cv: CvModel): string {
   section('WORK EXPERIENCE', entries(cv.experience));
   section('PROJECTS', entries(cv.projects));
   section('EDUCATION', entries(cv.education));
-  for (const extra of usableExtras(cv)) section(extra.title, extra.lines);
 
   return out.join('\n');
 }

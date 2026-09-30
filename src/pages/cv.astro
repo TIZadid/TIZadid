@@ -21,7 +21,7 @@ const entryGroups: [string, string, CvEntry[]][] = [
         <span class="mask"><span>Curriculum <span class="accent">vitae.</span></span></span>
       </h1>
       <p class="lede" data-reveal>
-        Take it as it is, or untick what you don't need and add a note of your own.
+        Take it as it is, or untick what you don't need and reword the summary.
         The PDF is plain single-column text, so tracking systems can read it.
       </p>
     </header>
@@ -38,6 +38,10 @@ const entryGroups: [string, string, CvEntry[]][] = [
         <fieldset>
           <legend class="label">Sections</legend>
           <label class="opt"><input type="checkbox" checked data-group="flag" value="summary" /><span>Summary</span></label>
+          <div class="field" data-summary-field>
+            <textarea data-summary rows="7" aria-label="Summary text">{cv.summary}</textarea>
+            <button type="button" class="label tool" data-summary-reset hidden>Reset to original</button>
+          </div>
           <label class="opt"><input type="checkbox" checked data-group="flag" value="skills" /><span>Technical skills</span></label>
           <label class="opt"><input type="checkbox" checked data-group="flag" value="soft" /><span>Soft skills</span></label>
         </fieldset>
@@ -63,23 +67,13 @@ const entryGroups: [string, string, CvEntry[]][] = [
           </fieldset>
         ))}
 
-        <fieldset>
-          <legend class="label">Add text</legend>
-          <label class="field"><span class="label">Heading</span>
-            <input type="text" data-extra-title placeholder="e.g. Certifications" maxlength="60" />
-          </label>
-          <label class="field"><span class="label">Text, one line per row</span>
-            <textarea data-extra-body rows="4" placeholder="Anything you want printed at the end of the CV"></textarea>
-          </label>
-        </fieldset>
-
         <div class="tools">
           <button type="button" class="label tool" data-all>Select all</button>
           <button type="button" class="label tool" data-none>Clear</button>
         </div>
       </form>
 
-      <div class="out" data-reveal>
+      <div class="out">
         <div class="bar">
           <p class="label"><span data-pages>A4</span> · live preview</p>
           <div class="actions">
@@ -99,11 +93,11 @@ const entryGroups: [string, string, CvEntry[]][] = [
 
 <script>
   import { applySelection, type Selection } from '../lib/cv/select';
-  import { usableExtras, type CvEntry, type CvModel } from '../lib/cv/model';
+  import type { CvEntry, CvModel } from '../lib/cv/model';
   import { renderCvText } from '../lib/cv/text';
 
   const STORE = 'tiz-cv-unticked';
-  const STORE_EXTRA = 'tiz-cv-extra';
+  const STORE_SUMMARY = 'tiz-cv-summary';
   const esc = (text: string) => text.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
   function setup() {
@@ -146,18 +140,13 @@ const entryGroups: [string, string, CvEntry[]][] = [
         ${e.blurb ? `<p>${esc(e.blurb)}</p>` : ''}
         ${e.bullets.length ? `<ul>${e.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}</div>`).join('');
 
-    const extraTitle = root.querySelector<HTMLInputElement>('[data-extra-title]')!;
-    const extraBody = root.querySelector<HTMLTextAreaElement>('[data-extra-body]')!;
-    try {
-      const saved = JSON.parse(localStorage.getItem(STORE_EXTRA) ?? '{}');
-      extraTitle.value = saved.title ?? '';
-      extraBody.value = saved.body ?? '';
-    } catch { /* storage unavailable */ }
+    // The summary can be reworded for one application; the site's own text is untouched.
+    const summary = root.querySelector<HTMLTextAreaElement>('[data-summary]')!;
+    const summaryReset = root.querySelector<HTMLButtonElement>('[data-summary-reset]')!;
+    try { summary.value = localStorage.getItem(STORE_SUMMARY) ?? cv.summary; } catch { /* storage unavailable */ }
 
-    const current = (): CvModel => ({
-      ...applySelection(cv, read()),
-      extra: [{ title: extraTitle.value, lines: extraBody.value.split('\n') }],
-    });
+    const current = (): CvModel =>
+      applySelection({ ...cv, summary: summary.value.replace(/\s+/g, ' ').trim() }, read());
     const fileName = (ext: string) => `${cv.name.trim().replace(/\s+/g, '-')}-CV.${ext}`;
 
     const draw = () => {
@@ -172,20 +161,22 @@ const entryGroups: [string, string, CvEntry[]][] = [
         ${section('SKILLS', skills)}
         ${section('WORK EXPERIENCE', entries(m.experience))}
         ${section('PROJECTS', entries(m.projects))}
-        ${section('EDUCATION', entries(m.education))}
-        ${usableExtras(m).map((x) => section(esc(x.title), x.lines.map((l) => `<p>${esc(l)}</p>`).join(''))).join('')}`;
+        ${section('EDUCATION', entries(m.education))}`;
+      summaryReset.hidden = summary.value === cv.summary;
+      summary.disabled = !read().summary;
       for (const entry of root.querySelectorAll<HTMLElement>('.entry')) {
         entry.classList.toggle('is-off', !entry.querySelector<HTMLInputElement>('.opt--entry input')!.checked);
       }
       try {
         localStorage.setItem(STORE, JSON.stringify(boxes.filter((b) => !b.checked).map(key)));
-        localStorage.setItem(STORE_EXTRA, JSON.stringify({ title: extraTitle.value, body: extraBody.value }));
+        if (summary.value === cv.summary) localStorage.removeItem(STORE_SUMMARY);
+        else localStorage.setItem(STORE_SUMMARY, summary.value);
       } catch { /* ignore */ }
     };
 
     root.addEventListener('change', draw);
     root.addEventListener('input', draw);
-    // Untick-all keeps at least the name; it never touches the text the visitor typed.
+    summaryReset.addEventListener('click', () => { summary.value = cv.summary; draw(); });
     const setAll = (value: boolean) => { boxes.forEach((b) => (b.checked = value)); draw(); };
 
     const copyLabel = root.querySelector<HTMLElement>('[data-copy-label]')!;
@@ -247,9 +238,10 @@ const entryGroups: [string, string, CvEntry[]][] = [
   input[type='checkbox']::after { content: ''; width: 8px; height: 8px; background: var(--ink); transform: scale(0); transition: transform 0.25s var(--ease); }
   input[type='checkbox']:checked { background: var(--accent); border-color: var(--accent); }
   input[type='checkbox']:checked::after { transform: scale(1); }
-  .field { display: grid; gap: 8px; padding-block: 8px; }
+  .field { display: grid; gap: 8px; padding: 4px 0 10px 30px; justify-items: start; }
+  .field textarea:disabled { opacity: 0.35; }
   .field input, .field textarea {
-    font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line);
+    font: inherit; font-size: 0.9rem; line-height: 1.45; color: var(--text); background: var(--surface); border: 1px solid var(--line);
     padding: 12px 14px; width: 100%; resize: vertical; border-radius: 0;
   }
   .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
@@ -259,12 +251,12 @@ const entryGroups: [string, string, CvEntry[]][] = [
   .tool { color: var(--text); padding-block: 8px; }
   .tool:hover { color: var(--accent); }
 
-  .out { position: sticky; top: 24px; display: grid; gap: 14px; }
+  .out { position: sticky; top: 96px; /* clears the fixed nav */ display: grid; gap: 14px; }
   .bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
   .bar :global(.btn svg) { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .paper {
     background: #fbfaf7; color: #111; font-family: Helvetica, Arial, sans-serif; font-size: 0.78rem; line-height: 1.4;
-    padding: clamp(20px, 3vw, 40px); max-height: calc(100svh - 120px); overflow: auto;
+    padding: clamp(20px, 3vw, 40px); max-height: calc(100svh - 190px); overflow: auto;
     box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.8);
   }
   .paper :global(h2) { font-size: 1.5rem; line-height: 1.2; }
@@ -279,6 +271,7 @@ const entryGroups: [string, string, CvEntry[]][] = [
     .cols { grid-template-columns: 1fr; }
     .out { position: static; grid-row: 1; }
     .paper { max-height: 60svh; }
-    .bar { position: sticky; top: 0; z-index: 5; background: var(--bg); padding-block: 10px; }
+    .bar { position: fixed; inset: auto 0 0 0; z-index: 50; background: var(--bg); border-top: 1px solid var(--line); padding: 10px var(--gutter); }
+    .page { padding-bottom: calc(var(--section) + 70px); }
   }
 </style>

@@ -6,7 +6,7 @@ const { profile, skills } = await getSite();
 <section class="section wrap" id="profile">
   <SectionHead index="01" label="Profile" title="Backend, mostly." />
   <div class="cols">
-    <p class="summary" data-scrub>{profile.body?.trim()}</p>
+    <p class="summary" data-scrub>{(profile.data.about ?? profile.body ?? '').trim()}</p>
     <div class="side">
       <ul class="skills">
         {skills.data.groups.map((group) => (

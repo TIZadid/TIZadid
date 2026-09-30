@@ -1,8 +1,8 @@
 ---
 title: Running
-kicker: Distance
+kicker: Most weeks
 stat: "50"
-unit: km
+unit: km longest
 statLabel: Longest run
 icon: footprints
 url: https://strava.app.link/SF3GcfIUQ6b
@@ -10,4 +10,4 @@ urlLabel: Follow on Strava
 order: 1
 ---
 
-Longest run: 50.06 km on 15 November 2025, from Dharmapasha Upazila in Sylhet Division. 8:08:11 moving time at 9:45 /km, with 129 m of climbing.
+I run short distances regularly and go long every now and then. The longest so far is 50 km: 50.06 km on 15 November 2025, from Dharmapasha Upazila in Sylhet Division, in 8:08:11.

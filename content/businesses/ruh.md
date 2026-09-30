@@ -2,9 +2,9 @@
 name: Ruh
 logo: /logos/ruh.webp
 url: https://www.instagram.com/ruh.bangladesh
-status: Launched Eid ul Adha 2026
-blurb: Small-batch, hand-embroidered kurta and panjabi for men.
-# Optional: role (e.g. Founder)
+status: Dhaka, Bangladesh
+blurb: Small-batch, hand-embroidered panjabi for men.
+role: Founder
 order: 2
 ---
 
